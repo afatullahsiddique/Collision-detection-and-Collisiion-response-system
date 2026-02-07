@@ -1,0 +1,31 @@
+PROCEDURE FOR RUNNING ON MACOS (ARM64)
+=====================================
+
+1. IDENTIFIED THE ISSUE
+   The error "exec format error" occurred because the original 'blob_demo' binary 
+   was compiled for Linux x86_64, which is incompatible with macOS ARM64.
+
+2. REMOVED INCOMPATIBLE BINARY
+   Command: rm blob_demo
+
+3. INSTALLED DEPENDENCIES
+   The project requires OpenGL and GLUT. On macOS, these are available as 
+   frameworks, but 'freeglut' provides better compatibility for this project.
+   Command: brew install freeglut
+
+4. UPDATED THE BUILD SYSTEM (Makefile)
+   The Makefile was modified to:
+   - Detect the operating system (Darwin for Mac).
+   - Link against native macOS frameworks: '-framework OpenGL -framework GLUT'.
+   - Include Homebrew library and header paths: '-L/opt/homebrew/opt/freeglut/lib -lglut'.
+
+5. UPDATED SOURCE HEADERS (include/gl/glut.h)
+   Modified the header to correctly locate OpenGL on Mac, as macOS uses 
+   '<OpenGL/gl.h>' instead of '<GL/gl.h>'.
+
+6. COMPILED THE PROJECT
+   Command: make clean && make
+   This generated a new 'blob_demo' binary specifically for your Mac.
+
+7. HOW TO RUN
+   Command: ./blob_demo
